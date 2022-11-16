@@ -16,7 +16,7 @@
     dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
     fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
     csr: "{{ letsencrypt_dir }}/csrs/{{ item.fqdn }}.csr"
-    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt.days_left_before_renew) }}"
+    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt_days_left_before_renew) }}"
     terms_agreed: True
   register: le_challenge
   become: True
@@ -40,7 +40,7 @@
     dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
     fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
     csr: "{{ letsencrypt_dir }}/csrs/{{ item.fqdn }}.csr"
-    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt.days_left_before_renew) }}"
+    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt_days_left_before_renew) }}"
     terms_agreed: True
     data: "{{ le_challenge }}"
   become: True
