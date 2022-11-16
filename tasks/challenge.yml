@@ -11,7 +11,7 @@
       {{ letsencrypt_production_api }}
       {% endif %}
     acme_version: "{{ letsencrypt_acme_version }}"
-    challenge: "{{ item.challenge }}"
+    challenge: "{{ item.challenge | default('dns-01') }}"
     chain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/chain.pem"
     dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
     fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
@@ -35,7 +35,7 @@
       {{ letsencrypt_production_api }}
       {% endif %}
     acme_version: "{{ letsencrypt_acme_version }}"
-    challenge: "{{ item.challenge }}"
+    challenge: "{{ item.challenge | default('dns-01') }}"
     chain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/chain.pem"
     dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
     fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
