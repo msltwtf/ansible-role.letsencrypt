@@ -1,10 +1,8 @@
 galaxy_info:
   author: msltwtf
-  description: replace_desc
-  role_name: replace_name
-
-  issue_tracker_url: https://github.com/msltwtf/replace_name
-
+  description: Create certificates and get them signed by LetsEncrypt.
+  role_name: letsencrypt
+  issue_tracker_url: https://github.com/msltwtf/letsencrypt/issues
   license: MIT
   min_ansible_version: '2.10'
   platforms: []
