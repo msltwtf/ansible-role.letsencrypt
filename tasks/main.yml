@@ -50,4 +50,4 @@
 - name: ACME Challenge
   loop: "{{ letsencrypt_domains }}"
   when: letsencrypt_domains is defined
-  ansible.builtin.include_tasks: "verify.yml"
+  ansible.builtin.include_tasks: "challenge.yml"
