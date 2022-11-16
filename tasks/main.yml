@@ -24,6 +24,8 @@
     path: "{{ letsencrypt_dir }}/keys/{{ item.fqdn }}.key"
   become: True
   loop: "{{ letsencrypt_domains }}"
+  when: letsencrypt_domains is defined
+
 
 - name: Create Domain CSR
   community.crypto.openssl_csr:
