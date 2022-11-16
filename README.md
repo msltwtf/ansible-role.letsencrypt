@@ -43,6 +43,13 @@ the following options are available which overwrite the global defaults per Doma
 ---
 
 ```yaml
+letsencrypt_email:
+```
+Email used for certificate creation.
+
+---
+
+```yaml
 letsencrypt_acme_version: 2
 ```
 The ACME version of the endpoint. Only tested with `2`.
