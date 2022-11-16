@@ -1,0 +1,46 @@
+---
+
+- name: Get Challenge
+  community.crypto.acme_certificate:
+    account_email: "{{ letsencrypt_email }}"
+    account_key_src: "{{ letsencrypt_dir }}/account/account.key"
+    acme_directory: >-
+      {% if item.staging_api is defined and item.staging_api == True %}
+      {{ letsencrypt_staging_api }}
+      {% else %}
+      {{ letsencrypt_production_api }}
+      {% endif %}
+    acme_version: "{{ letsencrypt_acme_version }}"
+    challenge: "{{ item.challenge }}"
+    chain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/chain.pem"
+    dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
+    fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
+    csr: "{{ letsencrypt_dir }}/csrs/{{ item.fqdn }}.csr"
+    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt.days_left_before_renew) }}"
+    terms_agreed: True
+  register: le_challenge
+  become: True
+
+- ansible.builtin.import_tasks: "challenges/{{ item.challenge | default('dns-01') }}/{{ item.provider }}.yml"  # noqa name[missing] no-handler
+  when: le_challenge is changed
+
+- name: Validate Challenge
+  community.crypto.acme_certificate:
+    account_email: "{{ letsencrypt_email }}"
+    account_key_src: "{{ letsencrypt_dir }}/account/account.key"
+    acme_directory: >-
+      {% if item.staging_api is defined and item.staging_api == True %}
+      {{ letsencrypt_staging_api }}
+      {% else %}
+      {{ letsencrypt_production_api }}
+      {% endif %}
+    acme_version: "{{ letsencrypt_acme_version }}"
+    challenge: "{{ item.challenge }}"
+    chain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/chain.pem"
+    dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/cert.pem"
+    fullchain_dest: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}/fullchain.pem"
+    csr: "{{ letsencrypt_dir }}/csrs/{{ item.fqdn }}.csr"
+    remaining_days: "{{ item.days_left_before_renew | default(letsencrypt.days_left_before_renew) }}"
+    terms_agreed: True
+    data: "{{ le_challenge }}"
+  become: True

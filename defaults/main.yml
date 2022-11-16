@@ -1,2 +1,6 @@
 ---
-# defaults file for letsencrypt
+letsencrypt_acme_version: 2
+letsencrypt_production_api: https://acme-v02.api.letsencrypt.org/directory
+letsencrypt_staging_api: https://acme-staging-v02.api.letsencrypt.org/directory
+letsencrypt_dir: /etc/letsencrypt
+letsencrypt_days_left_before_renew: 21

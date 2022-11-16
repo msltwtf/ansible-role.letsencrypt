@@ -1,0 +1,16 @@
+---
+
+- name: Create Validation Records
+  amazon.aws.route53:
+    type: TXT
+    value: "{{ le_challenge.challenge_data[item.fqdn]['dns-01'].resource_value }}"
+    state: present
+    ttl: 60
+    record: "{{ le_challenge.challenge_data[item.fqdn]['dns-01'].record | list }}"
+    zone: "{{ item.dns_zone }}"
+  delegate_to: localhost
+
+- name: Wait 60s for DNS to propagate
+  ansible.builtin.wait_for:
+    timeout: 60
+  delegate_to: localhost

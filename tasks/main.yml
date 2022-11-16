@@ -1,2 +1,48 @@
 ---
-# tasks file for letsencrypt
+
+- name: Create letsencrypt dirs
+  ansible.builtin.file:
+    path: "{{ letsencrypt_dir }}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: True
+  loop:
+    - account
+    - certs
+    - csrs
+    - keys
+
+- name: Generate Account Key
+  community.crypto.openssl_privatekey:
+    path: "{{ letsencrypt_dir }}/account/account.key"
+  become: True
+
+- name: Generate Domain Private Key
+  community.crypto.openssl_privatekey:
+    path: "{{ letsencrypt_dir }}/keys/{{ item.fqdn }}.key"
+  become: True
+  loop: "{{ letsencrypt_domains }}"
+
+- name: Create Domain CSR
+  community.crypto.openssl_csr:
+    common_name: "{{ item.fqdn }}"
+    path: "{{ letsencrypt_dir }}/csrs/{{ item.fqdn }}.csr"
+    privatekey_path: "{{ letsencrypt_dir }}/keys/{{ item.fqdn }}.key"
+  become: True
+  loop: "{{ letsencrypt_domains }}"
+
+- name: Create per domain cert directory
+  ansible.builtin.file:
+    path: "{{ letsencrypt_dir }}/certs/{{ item.fqdn }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ letsencrypt_domains }}"
+  become: True
+
+- name: ACME Challenge
+  loop: "{{ letsencrypt_domains }}"
+  ansible.builtin.include_tasks: "verify.yml"
