@@ -32,6 +32,7 @@
     privatekey_path: "{{ letsencrypt_dir }}/keys/{{ item.fqdn }}.key"
   become: True
   loop: "{{ letsencrypt_domains }}"
+  when: letsencrypt_domains is defined
 
 - name: Create per domain cert directory
   ansible.builtin.file:
@@ -41,8 +42,10 @@
     group: root
     mode: 0755
   loop: "{{ letsencrypt_domains }}"
+  when: letsencrypt_domains is defined
   become: True
 
 - name: ACME Challenge
   loop: "{{ letsencrypt_domains }}"
+  when: letsencrypt_domains is defined
   ansible.builtin.include_tasks: "verify.yml"
