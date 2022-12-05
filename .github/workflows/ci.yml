@@ -42,8 +42,6 @@ jobs:
     strategy:
       matrix:
         distro:
-          - rockylinux8
-          - rockylinux9
           - debian11
           - debian10
 
